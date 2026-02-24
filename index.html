@@ -3,32 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Educational Share Project</title>
-    <meta name="description" content="Click to see the shared content!">
-
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://your-username.github.io/your-repo/">
-    <meta property="og:title" content="Check this out!">
-    <meta property="og:description" content="Sharing a cool image from my educational project.">
-    <meta property="og:image" content="https://picsum.photos/1200/630.jpg">
-
+    <title>Native Story Share</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background: #f0f2f5; }
-        .card { background: white; padding: 25px; border-radius: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 85%; max-width: 400px; }
-        .btn { display: block; margin: 10px 0; padding: 15px; border-radius: 10px; text-decoration: none; color: white; font-weight: bold; background: #1877f2; }
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #121212; color: white; }
+        .card { background: #1e1e1e; padding: 25px; border-radius: 20px; text-align: center; width: 85%; max-width: 400px; border: 1px solid #333; }
+        .preview-img { width: 100%; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        button { background: #1877f2; color: white; border: none; padding: 18px; font-size: 1.2rem; border-radius: 12px; width: 100%; cursor: pointer; font-weight: bold; }
+        .hint { font-size: 12px; color: #888; margin-top: 15px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <img src="https://picsum.photos/1200/630.jpg" style="width:100%; border-radius:10px;">
-    <h3>Share to Facebook</h3>
-    <p>The image will now appear in the preview!</p>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=https://your-username.github.io/your-repo/" class="btn">
-        Post to Facebook
-    </a>
+    <img src="https://picsum.photos/1080/1920" class="preview-img" id="targetImg">
+    <h2>Share to Story</h2>
+    <p>Upload this image directly to your Facebook or Instagram Story.</p>
+    
+    <button id="shareNow">📲 Open in App</button>
+    
+    <p class="hint">Note: You must use Safari (iOS) or Chrome (Android) on your phone.</p>
 </div>
+
+<script>
+    document.getElementById('shareNow').addEventListener('click', async () => {
+        const img = document.getElementById('targetImg');
+        
+        try {
+            // 1. Download the image into the browser's memory
+            const response = await fetch(img.src);
+            const blob = await response.blob();
+            
+            // 2. Turn it into a real File object (Facebook needs a file, not a link)
+            const file = new File([blob], 'story-content.jpg', { type: 'image/jpeg' });
+
+            // 3. Check if the device can share files (Native Share Sheet)
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    files: [file],
+                    title: 'My Story',
+                    text: 'Check out this link: https://yourwebsite.com'
+                });
+            } else {
+                alert("Sharing files is not supported on this browser.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error: Please ensure you are using HTTPS on a mobile device.");
+        }
+    });
+</script>
 
 </body>
 </html>
