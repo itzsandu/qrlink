@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Share Trigger</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #ececec; }
+        .card { background: white; padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 85%; }
+        button { background: #1877f2; color: white; border: none; padding: 15px 20px; font-size: 1.1rem; border-radius: 10px; width: 100%; cursor: pointer; font-weight: bold; }
+        .preview-img { width: 100%; border-radius: 10px; margin-bottom: 15px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <img src="https://picsum.photos/600/900" class="preview-img" id="shareImg">
+    <h3>Share to your Story</h3>
+    <p>Tap the button below to upload this to Facebook, Instagram, or WhatsApp.</p>
+    <button id="trigger">📤 Open Share Menu</button>
+</div>
+
+<script>
+    document.getElementById('trigger').addEventListener('click', async () => {
+        const img = document.getElementById('shareImg');
+        
+        try {
+            // Convert the image into a shareable file object
+            const response = await fetch(img.src);
+            const blob = await response.blob();
+            const file = new File([blob], 'story-image.jpg', { type: 'image/jpeg' });
+
+            const shareData = {
+                files: [file],
+                title: 'Check this out!',
+                text: 'Sharing this from a QR code scan!',
+                url: 'https://yourwebsite.com' // THE LINK THAT GOES WITH THE STORY
+            };
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share(shareData);
+            } else {
+                alert("Sharing not supported. Please use a mobile browser like Safari or Chrome.");
+            }
+        } catch (err) {
+            alert("Error: Make sure you are using a secure HTTPS connection.");
+        }
+    });
+</script>
+
+</body>
+</html>
