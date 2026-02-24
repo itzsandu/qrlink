@@ -3,50 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Educational Share Trigger</title>
+    
+    <title>Educational Share Project</title>
+    <meta name="description" content="Click to see the shared content!">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://your-username.github.io/your-repo/">
+    <meta property="og:title" content="Check this out!">
+    <meta property="og:description" content="Sharing a cool image from my educational project.">
+    <meta property="og:image" content="https://picsum.photos/1200/630.jpg">
+
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #ececec; }
-        .card { background: white; padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 85%; }
-        button { background: #1877f2; color: white; border: none; padding: 15px 20px; font-size: 1.1rem; border-radius: 10px; width: 100%; cursor: pointer; font-weight: bold; }
-        .preview-img { width: 100%; border-radius: 10px; margin-bottom: 15px; border: 1px solid #ddd; }
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background: #f0f2f5; }
+        .card { background: white; padding: 25px; border-radius: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 85%; max-width: 400px; }
+        .btn { display: block; margin: 10px 0; padding: 15px; border-radius: 10px; text-decoration: none; color: white; font-weight: bold; background: #1877f2; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <img src="https://picsum.photos/600/900" class="preview-img" id="shareImg">
-    <h3>Share to your Story</h3>
-    <p>Tap the button below to upload this to Facebook, Instagram, or WhatsApp.</p>
-    <button id="trigger">📤 Open Share Menu</button>
+    <img src="https://picsum.photos/1200/630.jpg" style="width:100%; border-radius:10px;">
+    <h3>Share to Facebook</h3>
+    <p>The image will now appear in the preview!</p>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=https://your-username.github.io/your-repo/" class="btn">
+        Post to Facebook
+    </a>
 </div>
-
-<script>
-    document.getElementById('trigger').addEventListener('click', async () => {
-        const img = document.getElementById('shareImg');
-        
-        try {
-            // Convert the image into a shareable file object
-            const response = await fetch(img.src);
-            const blob = await response.blob();
-            const file = new File([blob], 'story-image.jpg', { type: 'image/jpeg' });
-
-            const shareData = {
-                files: [file],
-                title: 'Check this out!',
-                text: 'Sharing this from a QR code scan!',
-                url: 'https://yourwebsite.com' // THE LINK THAT GOES WITH THE STORY
-            };
-
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                await navigator.share(shareData);
-            } else {
-                alert("Sharing not supported. Please use a mobile browser like Safari or Chrome.");
-            }
-        } catch (err) {
-            alert("Error: Make sure you are using a secure HTTPS connection.");
-        }
-    });
-</script>
 
 </body>
 </html>
